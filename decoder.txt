@@ -1,0 +1,23 @@
+buf = bytearray(1024)
+with open(os.path.join(data_path, 'goforward.raw'), 'rb') as f:
+    decoder.start_utt()
+    while f.readinto(buf):
+        decoder.process_raw(buf, False, False)
+    decoder.end_utt()
+print('Best hypothesis segments:', [seg.word for seg in decoder.seg()])
+
+
+
+
+
+
+from pydub import AudioSegment
+from pydub.utils import make_chunks
+
+myaudio = AudioSegment.from_file("myaudio.wav" , "wav") 
+chunk_length_ms = 1000 # pydub calculates in millisec
+chunks = make_chunks(myaudio, chunk_length_ms) #Make chunks of one sec
+
+#Convert chunks to raw audio data which you can then feed to HTTP stream
+for i, chunk in enumerate(chunks):
+    raw_audio_data = chunk.raw_data
